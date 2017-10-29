@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ewbankkit/terraform-provider-jmespath/jmespath"
+	"github.com/EvilSuperstars/terraform-provider-jmespath/jmespath"
 	"github.com/hashicorp/terraform/plugin"
 )
 
