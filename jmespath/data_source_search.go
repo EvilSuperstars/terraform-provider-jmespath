@@ -30,19 +30,9 @@ func dataSourceSearch() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ValidateFunc: func(v interface{}, k string) (ws []string, errors []error) {
-					if v == nil {
-						return
-					}
-
 					s := v.(string)
-					if s == "" {
-						return
-					}
-
-					var i interface{}
-					err := json.Unmarshal([]byte(s), &i)
-					if err != nil {
-						errors = append(errors, fmt.Errorf("%q contains invalid JSON: %s", k, err))
+					if s != "" && !json.Valid([]byte(s)) {
+						errors = append(errors, fmt.Errorf("%q contains invalid JSON", k))
 					}
 
 					return
