@@ -37,7 +37,7 @@ func TestDataSource_basic(t *testing.T) {
 		t.Fatal(err)
 		return
 	}
-	resource.UnitTest(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
@@ -83,7 +83,7 @@ func TestDataSource_projection(t *testing.T) {
 		t.Fatal(err)
 		return
 	}
-	resource.UnitTest(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
@@ -145,7 +145,7 @@ func TestDataSource_multiSelect(t *testing.T) {
 		t.Fatal(err)
 		return
 	}
-	resource.UnitTest(t, resource.TestCase{
+	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
