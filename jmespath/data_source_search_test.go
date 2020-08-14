@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/hashicorp/terraform/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
 const testDataSourceConfig_basic = `
-provider "jmespath" {}
-
-data "jmespath_search" "foo" {
+data "jmespath_search" "test" {
   expression = "locations[?state == 'WA'].name | sort(@) | {WashingtonCities: join(', ', @)}"
 
   input =<<EOS
@@ -32,18 +30,21 @@ const testDataSourceExceptedResult_basic = `
 `
 
 func TestDataSource_basic(t *testing.T) {
+	dataSourceName := "data.jmespath_search.test"
+
 	expectedResult, err := normalizeJsonString(testDataSourceExceptedResult_basic)
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
+
 	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testDataSourceConfig_basic,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.jmespath_search.foo", "result", expectedResult),
+					resource.TestCheckResourceAttr(dataSourceName, "result", expectedResult),
 				),
 			},
 		},
@@ -51,9 +52,7 @@ func TestDataSource_basic(t *testing.T) {
 }
 
 const testDataSourceConfig_projection = `
-provider "jmespath" {}
-
-data "jmespath_search" "foo" {
+data "jmespath_search" "test" {
   expression = "people[*].first"
 
   input =<<EOS
@@ -78,18 +77,21 @@ const testDataSourceExceptedResult_projection = `
 `
 
 func TestDataSource_projection(t *testing.T) {
+	dataSourceName := "data.jmespath_search.test"
+
 	expectedResult, err := normalizeJsonString(testDataSourceExceptedResult_projection)
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
+
 	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testDataSourceConfig_projection,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.jmespath_search.foo", "result", expectedResult),
+					resource.TestCheckResourceAttr(dataSourceName, "result", expectedResult),
 				),
 			},
 		},
@@ -97,9 +99,7 @@ func TestDataSource_projection(t *testing.T) {
 }
 
 const testDataSourceConfig_multiSelect = `
-provider "jmespath" {}
-
-data "jmespath_search" "foo" {
+data "jmespath_search" "test" {
   expression = "people[].{Name: name, State: state.name}"
 
   input =<<EOS
@@ -140,18 +140,21 @@ const testDataSourceExceptedResult_multiSelect = `
 `
 
 func TestDataSource_multiSelect(t *testing.T) {
+	dataSourceName := "data.jmespath_search.test"
+
 	expectedResult, err := normalizeJsonString(testDataSourceExceptedResult_multiSelect)
 	if err != nil {
 		t.Fatal(err)
 		return
 	}
+
 	resource.ParallelTest(t, resource.TestCase{
 		Providers: testProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testDataSourceConfig_multiSelect,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.jmespath_search.foo", "result", expectedResult),
+					resource.TestCheckResourceAttr(dataSourceName, "result", expectedResult),
 				),
 			},
 		},
